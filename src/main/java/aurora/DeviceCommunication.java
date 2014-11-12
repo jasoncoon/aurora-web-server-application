@@ -1,118 +1,59 @@
 package aurora;
 
-import gnu.io.CommPortIdentifier;
-import gnu.io.SerialPort;
-import gnu.io.SerialPortEvent;
-import gnu.io.SerialPortEventListener;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.util.Enumeration;
+import jssc.*;
 
 public class DeviceCommunication implements SerialPortEventListener {
-    SerialPort serialPort;
 
-    /**
-     * The port we're normally going to use.
-     */
-    private static final String PORT_NAMES[] = {
-            "/dev/tty.usbserial-A9007UX1", // Mac OS X
-            "/dev/ttyACM0", // Raspberry Pi
-            "/dev/ttyUSB0", // Linux
-            "COM3", // Windows
-    };
-
-    /**
-     * A BufferedReader which will be fed by a InputStreamReader
-     * converting the bytes into characters
-     * making the displayed results codepage independent
-     */
-    private BufferedReader input;
-
-    /**
-     * The output stream to the port
-     */
-    private OutputStream output;
-
-    /**
-     * Milliseconds to block while waiting for port open
-     */
-    private static final int TIME_OUT = 2000;
-
-    /**
-     * Default bits per second for COM port.
-     */
-    private static final int DATA_RATE = 9600;
-
-    public void initialize() {
-        // the next line is for Raspberry Pi and
-        // gets us into the while loop and was suggested here was suggested http://www.raspberrypi.org/phpBB3/viewtopic.php?f=81&t=32186
-        System.setProperty("gnu.io.rxtx.SerialPorts", "/dev/ttyACM0");
-
-        CommPortIdentifier portId = null;
-        Enumeration portEnum = CommPortIdentifier.getPortIdentifiers();
-
-        //First, Find an instance of serial port as set in PORT_NAMES.
-        while (portEnum.hasMoreElements()) {
-            CommPortIdentifier currPortId = (CommPortIdentifier) portEnum.nextElement();
-            for (String portName : PORT_NAMES) {
-                if (currPortId.getName().equals(portName)) {
-                    portId = currPortId;
-                    break;
-                }
-            }
-        }
-        if (portId == null) {
-            System.out.println("Could not find COM port.");
-            return;
+    public void showScrollingTextMessage(ScrollingTextMessage message) {
+        String[] portNames = SerialPortList.getPortNames();
+        for(int i = 0; i < portNames.length; i++){
+            System.out.println(portNames[i]);
         }
 
+        SerialPort serialPort = new SerialPort("COM10");
         try {
-            // open serial port, and use class name for the appName.
-            serialPort = (SerialPort) portId.open(this.getClass().getName(), TIME_OUT);
-
-            // set port parameters
-            serialPort.setSerialPortParams(DATA_RATE,
+            serialPort.openPort();//Open serial port
+            serialPort.setParams(SerialPort.BAUDRATE_9600,
                     SerialPort.DATABITS_8,
                     SerialPort.STOPBITS_1,
-                    SerialPort.PARITY_NONE);
-
-            // open the streams
-            input = new BufferedReader(new InputStreamReader(serialPort.getInputStream()));
-            output = serialPort.getOutputStream();
-
-            // add event listeners
-            serialPort.addEventListener(this);
-            serialPort.notifyOnDataAvailable(true);
-        } catch (Exception e) {
-            System.err.println(e.toString());
+                    SerialPort.PARITY_NONE);//Set params. Also you can set params by this string: serialPort.setParams(9600, 8, 1, 0);
+            serialPort.writeString("{\"message\":{\"text\":\"Serial API is alive!\",\"red\":255,\"green\":255,\"blue\":255,\"top\":20,\"left\":4,\"font\":\"gohufont11b\",\"speed\":28,\"mode\":\"bounceReverse\"}}");
+            // serialPort.writeString("{\"command\":\"Down\"}");
+            System.out.println(serialPort.readString());
+            serialPort.closePort();//Close serial port
+        } catch (SerialPortException ex) {
+            System.out.println(ex);
         }
     }
 
-    /**
-     * This should be called when you stop using the port.
-     * This will prevent port locking on platforms like Linux.
-     */
-    public synchronized void close() {
-        if (serialPort != null) {
-            serialPort.removeEventListener();
-            serialPort.close();
-        }
-    }
+    static SerialPort serialPort;
 
-    /**
-     * Handle an event on the serial port. Read the data and print it.
-     */
-    public synchronized void serialEvent(SerialPortEvent oEvent) {
-        if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
+//    public void initialize() throws SerialPortException {
+//        String[] portNames = SerialPortList.getPortNames();
+//        for(int i = 0; i < portNames.length; i++){
+//            System.out.println(portNames[i]);
+//        }
+//
+//        serialPort = new SerialPort("COM10");
+//        serialPort.openPort();//Open port
+//        serialPort.setParams(9600, 8, 1, 0);//Set params
+//        int mask = SerialPort.MASK_RXCHAR;//Prepare mask
+//        serialPort.setEventsMask(mask);//Set mask
+//        serialPort.addEventListener(this);//Add SerialPortEventListener
+//    }
+//
+//    public void close() throws SerialPortException {
+//        serialPort.removeEventListener();
+//        serialPort.closePort();
+//    }
+
+    public void serialEvent(SerialPortEvent event) {
+        if (event.isRXCHAR()) {//If data is available
             try {
-                String inputLine = input.readLine();
-                System.out.println(inputLine);
-            } catch (Exception e) {
-                System.err.println(e.toString());
+                System.out.println(serialPort.readString());
+            } catch (SerialPortException ex) {
+                System.err.println(ex);
             }
         }
-        // Ignore all the other eventTypes, but you should consider the other ones.
     }
 }

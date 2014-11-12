@@ -24,6 +24,9 @@ public class ScrollingTextMessage {
   private int speed;
   private String mode;
 
+  public ScrollingTextMessage() {
+  }
+
   public ScrollingTextMessage(String text, int red, int green, int blue, int top, int left, String font, int speed, String mode) {
     this.text = text;
     this.red = red;

@@ -10,6 +10,9 @@ public class RestController {
 
     @RequestMapping("/message")
     public ScrollingTextMessage findAllMessages() {
+
+        new DeviceCommunication().showScrollingTextMessage(new ScrollingTextMessage());
+
         return new ScrollingTextMessage(
                 "This is a scrolling text message!",
                 255,
