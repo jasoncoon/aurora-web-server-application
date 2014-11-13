@@ -6,13 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Patterns | Aurora</title>
+    <title>Aurora</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
-
-    <!-- Custom styles -->
-    <link href="/css/common.css" rel="stylesheet" />
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -23,30 +20,32 @@
 
 </head>
 <body>
+
+<nav th:fragment="navigation (activeItem)" class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Aurora</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar">
+            <ul class="nav navbar-nav">
+                <li th:class="*{activeItem eq 'message'}?'active':''"><a href="message">Message</a></li>
+                <li th:class="*{activeItem eq 'patterns'}?'active':''"><a href="pattern">Patterns</a></li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>
+
 <div class="container">
-    <div th:replace="common :: navigation (activeItem='patterns')"></div>
-
-    <form class="form-horizontal" role="form" action="#" th:action="@{/pattern}" th:object="${pattern}" method="post">
-        <div class="form-group">
-            <label for="inputPattern" class="col-sm-2 control-label">Pattern</label>
-
-            <div class="col-sm-8">
-                <select size="10" class="form-control" id="inputPattern" th:field="*{pattern}">
-                    <option th:each="pattern : ${patterns}"
-                            th:value="${pattern}"
-                            th:text="${pattern}">Wireframe
-                    </option>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-8">
-                <button type="submit" class="btn btn-default">Show</button>
-                <p class="help-block" th:text="${status}"></p>
-            </div>
-        </div>
-    </form>
 </div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
