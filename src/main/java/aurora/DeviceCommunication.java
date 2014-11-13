@@ -8,7 +8,23 @@ public class DeviceCommunication implements SerialPortEventListener {
 
     static SerialPort serialPort;
 
+    public void showPattern(PatternWrapper wrapper) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(wrapper);
+
+        sendJson(json);
+    }
+
     public void showScrollingTextMessage(ScrollingTextMessage message) throws JsonProcessingException {
+        MessageWrapper wrapper = new MessageWrapper(message);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(wrapper);
+
+        sendJson(json);
+    }
+
+    private void sendJson(String json) {
         String portName = "COM1";
 
         String[] portNames = SerialPortList.getPortNames();
@@ -16,11 +32,6 @@ public class DeviceCommunication implements SerialPortEventListener {
             System.out.println(portNames[i]);
             portName = portNames[i];
         }
-
-        MessageWrapper wrapper = new MessageWrapper(message);
-
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(wrapper);
 
         SerialPort serialPort = new SerialPort(portName);
         try {
