@@ -8,14 +8,14 @@ public class DeviceCommunication implements SerialPortEventListener {
 
     static SerialPort serialPort;
 
-    public void showPattern(PatternWrapper wrapper) throws JsonProcessingException {
+    public void showPattern(PatternWrapper wrapper) throws JsonProcessingException, SerialPortException {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(wrapper);
 
         sendJson(json);
     }
 
-    public void showScrollingTextMessage(ScrollingTextMessage message) throws JsonProcessingException {
+    public void showScrollingTextMessage(ScrollingTextMessage message) throws JsonProcessingException, SerialPortException {
         MessageWrapper wrapper = new MessageWrapper(message);
 
         ObjectMapper mapper = new ObjectMapper();
@@ -24,7 +24,7 @@ public class DeviceCommunication implements SerialPortEventListener {
         sendJson(json);
     }
 
-    private void sendJson(String json) {
+    private void sendJson(String json) throws SerialPortException {
         String portName = "COM1";
 
         String[] portNames = SerialPortList.getPortNames();
@@ -34,18 +34,15 @@ public class DeviceCommunication implements SerialPortEventListener {
         }
 
         SerialPort serialPort = new SerialPort(portName);
-        try {
-            serialPort.openPort();
-            serialPort.setParams(SerialPort.BAUDRATE_9600,
-                    SerialPort.DATABITS_8,
-                    SerialPort.STOPBITS_1,
-                    SerialPort.PARITY_NONE);
-            serialPort.writeString(json);
-            System.out.println(serialPort.readString());
-            serialPort.closePort();
-        } catch (SerialPortException ex) {
-            System.out.println(ex);
-        }
+
+        serialPort.openPort();
+        serialPort.setParams(SerialPort.BAUDRATE_9600,
+                SerialPort.DATABITS_8,
+                SerialPort.STOPBITS_1,
+                SerialPort.PARITY_NONE);
+        serialPort.writeString(json);
+        System.out.println(serialPort.readString());
+        serialPort.closePort();
     }
 
 //    public void initialize() throws SerialPortException {

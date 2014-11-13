@@ -1,6 +1,7 @@
 package aurora;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jssc.SerialPortException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,12 +36,19 @@ public class MessageController {
     }
 
     @RequestMapping(value = "/message", method = RequestMethod.POST)
-    public String messageSubmit(@ModelAttribute ScrollingTextMessage message, Model model) throws JsonProcessingException {
+    public String messageSubmit(@ModelAttribute ScrollingTextMessage message, Model model) {
+      model.addAttribute("message", message);
+      model.addAttribute("modes", modes);
+      model.addAttribute("fonts", fonts);
+
+      try {
         new DeviceCommunication().showScrollingTextMessage(message);
-        model.addAttribute("message", message);
-        model.addAttribute("modes", modes);
-        model.addAttribute("fonts", fonts);
         model.addAttribute("status", "Success!");
-        return "editMessage";
+      }
+      catch(Exception ex) {
+        model.addAttribute("status", ex.getMessage());
+      }
+
+      return "editMessage";
     }
 }

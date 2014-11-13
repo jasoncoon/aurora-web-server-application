@@ -1,6 +1,7 @@
 package aurora;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jssc.SerialPortException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -9,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class RestController {
 
     @RequestMapping(value = "api/message", method = RequestMethod.POST)
-    public void showScrollingTextMessage(@RequestParam(value="message") ScrollingTextMessage message) throws JsonProcessingException {
+    public void showScrollingTextMessage(@RequestParam(value="message") ScrollingTextMessage message)
+        throws JsonProcessingException, SerialPortException {
         new DeviceCommunication().showScrollingTextMessage(message);
     }
 }

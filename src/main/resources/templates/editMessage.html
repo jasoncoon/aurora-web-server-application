@@ -37,46 +37,6 @@
         </div>
 
         <div class="form-group">
-            <label for="inputRed" class="col-sm-2 control-label">Red</label>
-
-            <div class="col-sm-8">
-                <input class="form-control" id="inputRed" type="text" th:field="*{red}"/>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="inputGreen" class="col-sm-2 control-label">Green</label>
-
-            <div class="col-sm-8">
-                <input class="form-control" id="inputGreen" type="text" th:field="*{green}"/>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="inputBlue" class="col-sm-2 control-label">Blue</label>
-
-            <div class="col-sm-8">
-                <input class="form-control" id="inputBlue" type="text" th:field="*{blue}"/>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="inputTop" class="col-sm-2 control-label">Top</label>
-
-            <div class="col-sm-8">
-                <input class="form-control" id="inputTop" type="text" th:field="*{top}"/>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="inputLeft" class="col-sm-2 control-label">Left</label>
-
-            <div class="col-sm-8">
-                <input class="form-control" id="inputLeft" type="text" th:field="*{left}"/>
-            </div>
-        </div>
-
-        <div class="form-group">
             <label for="inputFont" class="col-sm-2 control-label">Font</label>
 
             <div class="col-sm-8">
@@ -89,11 +49,57 @@
             </div>
         </div>
 
+        <hr />
+
+        <div class="form-group">
+            <label for="inputRed" class="col-sm-2 control-label">Red</label>
+
+            <div class="col-sm-8">
+                <input class="form-control" id="inputRed" type="number" th:field="*{red}" min="0" max="255" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputGreen" class="col-sm-2 control-label">Green</label>
+
+            <div class="col-sm-8">
+                <input class="form-control" id="inputGreen" type="number" th:field="*{green}" min="0" max="255" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputBlue" class="col-sm-2 control-label">Blue</label>
+
+            <div class="col-sm-8">
+                <input class="form-control" id="inputBlue" type="number" th:field="*{blue}" min="0" max="255" />
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+            <label for="inputTop" class="col-sm-2 control-label">Top</label>
+
+            <div class="col-sm-8">
+                <input class="form-control" id="inputTop" type="number" th:field="*{top}" min="0" max="31" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputLeft" class="col-sm-2 control-label">Left</label>
+
+            <div class="col-sm-8">
+                <input class="form-control" id="inputLeft" type="number" th:field="*{left}" min="0" max="31" />
+            </div>
+        </div>
+
+        <hr />
+
         <div class="form-group">
             <label for="inputSpeed" class="col-sm-2 control-label">Scroll Speed</label>
 
             <div class="col-sm-8">
-                <input class="form-control" id="inputSpeed" type="text" th:field="*{speed}"/>
+                <input class="form-control" id="inputSpeed" type="number" th:field="*{speed}" min="0" max="255" />
             </div>
         </div>
 
@@ -109,6 +115,8 @@
                 </select>
             </div>
         </div>
+
+        <hr />
 
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-8">
