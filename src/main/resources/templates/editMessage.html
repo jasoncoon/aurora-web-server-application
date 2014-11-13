@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Message | Aurora</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1>Aurora Message Editor</h1>
+
+<form action="#" th:action="@{/message}" th:object="${message}" method="post">
+    <p>Text: <input type="text" th:field="*{text}"/></p>
+
+    <p>Red: <input type="text" th:field="*{red}"/></p>
+
+    <p>Green: <input type="text" th:field="*{green}"/></p>
+
+    <p>Blue: <input type="text" th:field="*{blue}"/></p>
+
+    <p>Top: <input type="text" th:field="*{top}"/></p>
+
+    <p>Left: <input type="text" th:field="*{left}"/></p>
+
+    <p>Font: <select th:field="*{font}">
+        <option th:each="font : ${fonts}"
+                th:value="${font}"
+                th:text="${font}">Wireframe
+        </option>
+    </select>
+    </p>
+
+    <p>Speed: <input type="text" th:field="*{speed}"/></p>
+
+    <p>Mode: <select th:field="*{mode}">
+        <option th:each="mode : ${modes}"
+                th:value="${mode}"
+                th:text="${mode}">Wireframe
+        </option>
+    </select>
+    </p>
+
+    <p><input type="submit" value="Send"/></p>
+
+    <p th:text="${status}"></p>
+</form>
+</body>
+</html>

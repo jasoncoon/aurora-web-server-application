@@ -1,32 +1,41 @@
 package aurora;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jssc.*;
 
 public class DeviceCommunication implements SerialPortEventListener {
 
-    public void showScrollingTextMessage(ScrollingTextMessage message) {
+    static SerialPort serialPort;
+
+    public void showScrollingTextMessage(ScrollingTextMessage message) throws JsonProcessingException {
+        String portName = "COM1";
+
         String[] portNames = SerialPortList.getPortNames();
-        for(int i = 0; i < portNames.length; i++){
+        for (int i = 0; i < portNames.length; i++) {
             System.out.println(portNames[i]);
+            portName = portNames[i];
         }
 
-        SerialPort serialPort = new SerialPort("COM10");
+        MessageWrapper wrapper = new MessageWrapper(message);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(wrapper);
+
+        SerialPort serialPort = new SerialPort(portName);
         try {
-            serialPort.openPort();//Open serial port
+            serialPort.openPort();
             serialPort.setParams(SerialPort.BAUDRATE_9600,
                     SerialPort.DATABITS_8,
                     SerialPort.STOPBITS_1,
-                    SerialPort.PARITY_NONE);//Set params. Also you can set params by this string: serialPort.setParams(9600, 8, 1, 0);
-            serialPort.writeString("{\"message\":{\"text\":\"Serial API is alive!\",\"red\":255,\"green\":255,\"blue\":255,\"top\":20,\"left\":4,\"font\":\"gohufont11b\",\"speed\":28,\"mode\":\"bounceReverse\"}}");
-            // serialPort.writeString("{\"command\":\"Down\"}");
+                    SerialPort.PARITY_NONE);
+            serialPort.writeString(json);
             System.out.println(serialPort.readString());
-            serialPort.closePort();//Close serial port
+            serialPort.closePort();
         } catch (SerialPortException ex) {
             System.out.println(ex);
         }
     }
-
-    static SerialPort serialPort;
 
 //    public void initialize() throws SerialPortException {
 //        String[] portNames = SerialPortList.getPortNames();
