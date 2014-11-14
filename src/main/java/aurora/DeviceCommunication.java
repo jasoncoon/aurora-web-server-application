@@ -4,15 +4,57 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jssc.*;
 
+import java.io.IOException;
+import java.time.DateTimeException;
+import java.time.Instant;
+
 public class DeviceCommunication implements SerialPortEventListener {
 
     static SerialPort serialPort;
+
+    public ResultSet listPalettes() throws IOException, SerialPortException {
+        ObjectMapper mapper = new ObjectMapper();
+        CommandWrapper wrapper = new CommandWrapper("ListPalettes");
+        String json = mapper.writeValueAsString(wrapper);
+        String results = sendJson(json, true);
+        return mapper.readValue(results, ResultSet.class);
+    }
+
+    public void showPalette(PaletteWrapper wrapper) throws JsonProcessingException, SerialPortException {
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(wrapper);
+
+        sendJson(json, false);
+    }
+
+    public ResultSet listPatterns() throws IOException, SerialPortException {
+        ObjectMapper mapper = new ObjectMapper();
+        CommandWrapper wrapper = new CommandWrapper("ListPatterns");
+        String json = mapper.writeValueAsString(wrapper);
+        String results = sendJson(json, true);
+        return mapper.readValue(results, ResultSet.class);
+    }
 
     public void showPattern(PatternWrapper wrapper) throws JsonProcessingException, SerialPortException {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(wrapper);
 
-        sendJson(json);
+        sendJson(json, false);
+    }
+
+    public ResultSet listAnimations() throws IOException, SerialPortException {
+        ObjectMapper mapper = new ObjectMapper();
+        CommandWrapper wrapper = new CommandWrapper("ListAnimations");
+        String json = mapper.writeValueAsString(wrapper);
+        String results = sendJson(json, true);
+        return mapper.readValue(results, ResultSet.class);
+    }
+
+    public void showAnimation(AnimationWrapper wrapper) throws JsonProcessingException, SerialPortException {
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(wrapper);
+
+        sendJson(json, false);
     }
 
     public void showScrollingTextMessage(ScrollingTextMessage message) throws JsonProcessingException, SerialPortException {
@@ -21,10 +63,10 @@ public class DeviceCommunication implements SerialPortEventListener {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(wrapper);
 
-        sendJson(json);
+        sendJson(json, false);
     }
 
-    private void sendJson(String json) throws SerialPortException {
+    private String sendJson(String json, boolean getResponse) throws SerialPortException {
         String portName = "COM1";
 
         String[] portNames = SerialPortList.getPortNames();
@@ -41,8 +83,22 @@ public class DeviceCommunication implements SerialPortEventListener {
                 SerialPort.STOPBITS_1,
                 SerialPort.PARITY_NONE);
         serialPort.writeString(json);
-        System.out.println(serialPort.readString());
+        String buffer = null;
+        StringBuffer results = new StringBuffer();
+        if(getResponse) {
+            Instant timeout = Instant.now().plusSeconds(5);
+            while (serialPort.getInputBufferBytesCount() < 1) {
+                if (Instant.now().isAfter(timeout))
+                    break;
+            }
+            while(serialPort.getInputBufferBytesCount() > 0 || Instant.now().isBefore(timeout)) {
+                buffer = serialPort.readString();
+                if(buffer != null)
+                    results.append(buffer);
+            }
+        }
         serialPort.closePort();
+        return results.toString();
     }
 
 //    public void initialize() throws SerialPortException {

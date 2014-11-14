@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Patterns | Aurora</title>
+    <title>Palettes | Aurora</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
@@ -24,17 +24,17 @@
 </head>
 <body>
 <div class="container">
-    <div th:replace="common :: navigation (activeItem='pattern')"></div>
+    <div th:replace="common :: navigation (activeItem='palette')"></div>
 
-    <form class="form-horizontal" role="form" action="#" th:action="@{/pattern}" th:object="${pattern}" method="post">
+    <form class="form-horizontal" role="form" action="#" th:action="@{/palette}" th:object="${palette}" method="post">
         <div class="form-group">
-            <label for="inputPattern" class="col-sm-2 control-label">Pattern</label>
+            <label for="inputPalette" class="col-sm-2 control-label">Palette</label>
 
             <div class="col-sm-8">
-                <select size="10" class="form-control" id="inputPattern" th:field="*{pattern}">
-                    <option th:each="pattern : ${patterns}"
-                            th:value="${pattern}"
-                            th:text="${pattern}">Wireframe
+                <select size="10" class="form-control" id="inputPalette" th:field="*{palette}">
+                    <option th:each="palette : ${palettes}"
+                            th:value="${palette}"
+                            th:text="${palette}">Wireframe
                     </option>
                 </select>
             </div>

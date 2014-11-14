@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>Patterns | Aurora</title>
+    <title>Animations | Aurora</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
@@ -24,17 +24,17 @@
 </head>
 <body>
 <div class="container">
-    <div th:replace="common :: navigation (activeItem='pattern')"></div>
+    <div th:replace="common :: navigation (activeItem='animation')"></div>
 
-    <form class="form-horizontal" role="form" action="#" th:action="@{/pattern}" th:object="${pattern}" method="post">
+    <form class="form-horizontal" role="form" action="#" th:action="@{/animation}" th:object="${animation}" method="post">
         <div class="form-group">
-            <label for="inputPattern" class="col-sm-2 control-label">Pattern</label>
+            <label for="inputAnimation" class="col-sm-2 control-label">Animation</label>
 
             <div class="col-sm-8">
-                <select size="10" class="form-control" id="inputPattern" th:field="*{pattern}">
-                    <option th:each="pattern : ${patterns}"
-                            th:value="${pattern}"
-                            th:text="${pattern}">Wireframe
+                <select size="10" class="form-control" id="inputAnimation" th:field="*{animation}">
+                    <option th:each="animation : ${animations}"
+                            th:value="${animation}"
+                            th:text="${animation}">Wireframe
                     </option>
                 </select>
             </div>

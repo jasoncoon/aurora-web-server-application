@@ -1,45 +1,24 @@
 package aurora;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jssc.SerialPortException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.io.IOException;
+
 @org.springframework.stereotype.Controller
 public class PatternController {
 
-    static final String[] patterns = new String[]{
-            "FlowField",
-            "Spin",
-            "Noise",
-            "Wave",
-            "Attract",
-            "Bounce",
-            "Flock",
-            "Infinity",
-            "Plasma",
-            "Invaders",
-            "Snake",
-            "Cube",
-            "Fire",
-            "Life",
-            "Maze",
-            "Pulse",
-            "RainbowSmoke",
-            "Spark",
-            "Spiral",
-            "Tetrahedron",
-            "Ghost",
-            "Dots1",
-            "Dots2",
-            "SlowMandala",
-            "Mandala8"
-    };
+    static String[] patterns;
 
     @RequestMapping(value = "/pattern", method = RequestMethod.GET)
-    public String getPatterns(Model model) {
+    public String getPatterns(Model model) throws IOException, SerialPortException {
+        if (patterns == null || patterns.length < 1) {
+            ResultSet resultSet = new DeviceCommunication().listPatterns();
+            patterns = resultSet.getResults();
+        }
 
         model.addAttribute("pattern", new PatternWrapper("FlowField"));
         model.addAttribute("patterns", patterns);
@@ -48,18 +27,22 @@ public class PatternController {
     }
 
     @RequestMapping(value = "/pattern", method = RequestMethod.POST)
-    public String patternSubmit(@ModelAttribute PatternWrapper pattern, Model model) {
-      model.addAttribute("pattern", pattern);
-      model.addAttribute("patterns", patterns);
+    public String patternSubmit(@ModelAttribute PatternWrapper pattern, Model model) throws IOException, SerialPortException {
+        try {
+            new DeviceCommunication().showPattern(pattern);
+            model.addAttribute("status", "Success!");
+        } catch (Exception ex) {
+            model.addAttribute("status", ex.getMessage());
+        }
 
-      try {
-        new DeviceCommunication().showPattern(pattern);
-        model.addAttribute("status", "Success!");
-      }
-      catch(Exception ex) {
-        model.addAttribute("status", ex.getMessage());
-      }
+        if (patterns == null || patterns.length < 1) {
+            ResultSet resultSet = new DeviceCommunication().listPatterns();
+            patterns = resultSet.getResults();
+        }
 
-      return "patternsList";
+        model.addAttribute("pattern", pattern);
+        model.addAttribute("patterns", patterns);
+
+        return "patternsList";
     }
 }
