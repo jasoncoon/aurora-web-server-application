@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class Controller {
 
     @RequestMapping("/")
-    public String index(@RequestParam(value = "name", required = false, defaultValue = "World") String name, Model model) {
-        model.addAttribute("name", name);
+    public String index() {
         return "index";
+    }
+
+    @RequestMapping("/remote")
+    public String remote() {
+        return "remote";
     }
 }
