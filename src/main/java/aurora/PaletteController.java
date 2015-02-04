@@ -20,7 +20,7 @@ public class PaletteController {
             palettes = resultSet.getResults();
         }
 
-        model.addAttribute("palette", new PaletteWrapper("FlowField"));
+        model.addAttribute("palette", new PaletteWrapper("Rainbow"));
         model.addAttribute("palettes", palettes);
 
         return "palettesList";
