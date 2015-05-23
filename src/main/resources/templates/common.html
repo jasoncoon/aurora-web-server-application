@@ -36,6 +36,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="navbar">
       <ul class="nav navbar-nav">
+        <li th:class="*{activeItem eq 'weather'}?'active':''"><a href="weather">Weather</a></li>
         <li th:class="*{activeItem eq 'message'}?'active':''"><a href="message">Message</a></li>
         <li th:class="*{activeItem eq 'audiopattern'}?'active':''"><a href="audiopattern">Audio Pattern</a></li>
         <li th:class="*{activeItem eq 'pattern'}?'active':''"><a href="pattern">Pattern</a></li>

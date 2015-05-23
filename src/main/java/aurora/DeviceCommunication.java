@@ -76,6 +76,20 @@ public class DeviceCommunication implements SerialPortEventListener {
     sendJson(json, false);
   }
 
+  public void setTemperature(TemperatureWrapper wrapper) throws JsonProcessingException, SerialPortException {
+    ObjectMapper mapper = new ObjectMapper();
+    String json = mapper.writeValueAsString(wrapper);
+
+    sendJson(json, false);
+  }
+
+  public void setWeatherType(WeatherTypeWrapper wrapper) throws JsonProcessingException, SerialPortException {
+    ObjectMapper mapper = new ObjectMapper();
+    String json = mapper.writeValueAsString(wrapper);
+
+    sendJson(json, false);
+  }
+
   public void showScrollingTextMessage(ScrollingTextMessage message) throws JsonProcessingException, SerialPortException {
     MessageWrapper wrapper = new MessageWrapper(message);
 
