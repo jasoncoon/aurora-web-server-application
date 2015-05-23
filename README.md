@@ -19,3 +19,4 @@ To use:
 1. Download source.
 2. Build using Maven: mvn package
 3. Run the built jar file: double click or run java -jar aurora-spring-boot-1.0-SNAPSHOT.jar
+4. Open a browser to http://127.0.0.1:8080
