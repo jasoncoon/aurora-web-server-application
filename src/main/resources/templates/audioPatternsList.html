@@ -6,13 +6,13 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <title>Aurora</title>
+  <title>Audio Patterns | Aurora</title>
 
   <!-- Bootstrap -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
 
   <!-- Custom styles -->
-  <link href="/css/common.css" rel="stylesheet"/>
+  <link href="/css/common.css" rel="stylesheet" />
 
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -23,32 +23,30 @@
 
 </head>
 <body>
-
-<div th:replace="common :: navigation (activeItem='')"></div>
-
 <div class="container">
-  <div class="list-group">
-    <a href="message" class="list-group-item">
-      <h4 class="list-group-item-heading">Message</h4>
-      <p class="list-group-item-text">Display scrolling text messages.</p>
-    </a>
-    <a href="audiopattern" class="list-group-item">
-      <h4 class="list-group-item-heading">Audio Pattern</h4>
-      <p class="list-group-item-text">Choose an audio pattern to display.</p>
-    </a>
-    <a href="pattern" class="list-group-item">
-      <h4 class="list-group-item-heading">Pattern</h4>
-      <p class="list-group-item-text">Choose a dynamic pattern to display.</p>
-    </a>
-    <a href="animation" class="list-group-item">
-      <h4 class="list-group-item-heading">Animation</h4>
-      <p class="list-group-item-text">Choose an animation to display.</p>
-    </a>
-    <a href="animation" class="list-group-item">
-      <h4 class="list-group-item-heading">Palette</h4>
-      <p class="list-group-item-text">Choose a color palette for patterns.</p>
-    </a>
-  </div>
+  <div th:replace="common :: navigation (activeItem='audioPattern')"></div>
+
+  <form class="form-horizontal" role="form" action="#" th:action="@{/audiopattern}" th:object="${audioPattern}" method="post">
+    <div class="form-group">
+      <label for="inputPattern" class="col-sm-2 control-label">Audio Pattern</label>
+
+      <div class="col-sm-8">
+        <select size="10" class="form-control" id="inputPattern" th:field="*{audioPattern}">
+          <option th:each="audioPattern : ${audioPatterns}"
+                  th:value="${audioPattern}"
+                  th:text="${audioPattern}">Wireframe
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-8">
+        <button type="submit" class="btn btn-default">Show</button>
+        <p class="help-block" th:text="${status}"></p>
+      </div>
+    </div>
+  </form>
 </div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
