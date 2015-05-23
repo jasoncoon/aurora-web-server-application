@@ -13,3 +13,9 @@ Features:
 * Change to a specific palette, chosen from a list of palette names.
 
 Built using [Spring Boot](http://projects.spring.io/spring-boot/) and Java.
+
+To use:
+
+1. Download source.
+2. Build using Maven: mvn package
+3. Run the built jar file: double click or run java -jar aurora-spring-boot-1.0-SNAPSHOT.jar
