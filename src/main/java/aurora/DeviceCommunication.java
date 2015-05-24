@@ -1,5 +1,7 @@
 package aurora;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.Instant;
 
@@ -158,5 +160,49 @@ public class DeviceCommunication implements SerialPortEventListener {
         System.err.println(ex);
       }
     }
+  }
+
+  public void uploadFile(UploadFile uploadFile) throws IOException, SerialPortException {
+    File file = new File(uploadFile.getLocalPath());
+
+    CreateFile createFile = new CreateFile();
+    createFile.setPath(String.format("/gifs/%s.gif", uploadFile.getRemoteName()));
+    createFile.setLength(file.length());
+
+    CreateFileWrapper wrapper = new CreateFileWrapper();
+    wrapper.setCreateFile(createFile);
+
+    ObjectMapper mapper = new ObjectMapper();
+    String json = mapper.writeValueAsString(wrapper);
+
+    String portName = "COM1";
+
+    String[] portNames = SerialPortList.getPortNames();
+    for (int i = 0; i < portNames.length; i++) {
+      System.out.println(portNames[i]);
+      portName = portNames[i];
+    }
+
+    SerialPort serialPort = new SerialPort(portName);
+
+    serialPort.openPort();
+    serialPort.setParams(SerialPort.BAUDRATE_9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+    serialPort.writeString(json);
+    serialPort.closePort();
+
+    serialPort = new SerialPort(portName);
+
+    serialPort.openPort();
+    serialPort.setParams(SerialPort.BAUDRATE_9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
+
+    FileInputStream stream = new FileInputStream(file);
+    int b = stream.read();
+    while (b > -1) {
+      serialPort.writeByte((byte) b);
+      b = stream.read();
+    }
+    stream.close();
+
+    serialPort.closePort();
   }
 }
