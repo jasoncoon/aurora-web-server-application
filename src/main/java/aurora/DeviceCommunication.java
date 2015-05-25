@@ -163,9 +163,11 @@ public class DeviceCommunication implements SerialPortEventListener {
     }
   }
 
-  public void uploadFile(String name, MultipartFile file) throws IOException, SerialPortException {
+  public void uploadAnimation(String name, MultipartFile file) throws IOException, SerialPortException {
+    String path = String.format("/gifs/%s.gif", name);
+    path = path.toUpperCase();
     CreateFile createFile = new CreateFile();
-    createFile.setPath(String.format("/gifs/%s.gif", name));
+    createFile.setPath(path);
     createFile.setLength(file.getSize());
 
     CreateFileWrapper wrapper = new CreateFileWrapper();

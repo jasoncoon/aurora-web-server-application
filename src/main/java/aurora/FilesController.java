@@ -17,7 +17,7 @@ public class FilesController {
   @RequestMapping(value = "/files", method = RequestMethod.POST)
   public String fileSubmit(@RequestParam("name") String name, @RequestParam("file") MultipartFile file, Model model) {
     try {
-      new DeviceCommunication().uploadFile(name, file);
+      new DeviceCommunication().uploadAnimation(name, file);
       model.addAttribute("status", "Success!");
     }
     catch(Exception ex) {
