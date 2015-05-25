@@ -1,9 +1,10 @@
 package aurora;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.Instant;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -162,12 +163,10 @@ public class DeviceCommunication implements SerialPortEventListener {
     }
   }
 
-  public void uploadFile(UploadFile uploadFile) throws IOException, SerialPortException {
-    File file = new File(uploadFile.getLocalPath());
-
+  public void uploadFile(String name, MultipartFile file) throws IOException, SerialPortException {
     CreateFile createFile = new CreateFile();
-    createFile.setPath(String.format("/gifs/%s.gif", uploadFile.getRemoteName()));
-    createFile.setLength(file.length());
+    createFile.setPath(String.format("/gifs/%s.gif", name));
+    createFile.setLength(file.getSize());
 
     CreateFileWrapper wrapper = new CreateFileWrapper();
     wrapper.setCreateFile(createFile);
@@ -195,7 +194,7 @@ public class DeviceCommunication implements SerialPortEventListener {
     serialPort.openPort();
     serialPort.setParams(SerialPort.BAUDRATE_9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
 
-    FileInputStream stream = new FileInputStream(file);
+    InputStream stream = file.getInputStream();
     int b = stream.read();
     while (b > -1) {
       serialPort.writeByte((byte) b);

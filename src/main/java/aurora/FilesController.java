@@ -1,28 +1,23 @@
 package aurora;
 
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @org.springframework.stereotype.Controller
 public class FilesController {
 
   @RequestMapping(value = "/files", method = RequestMethod.GET)
   public String file(Model model) {
-    UploadFile file = new UploadFile();
-
-    model.addAttribute("file", file);
-
     return "files";
   }
 
   @RequestMapping(value = "/files", method = RequestMethod.POST)
-  public String fileSubmit(@ModelAttribute UploadFile file, Model model) {
-    model.addAttribute("file", file);
-
+  public String fileSubmit(@RequestParam("name") String name, @RequestParam("file") MultipartFile file, Model model) {
     try {
-      new DeviceCommunication().uploadFile(file);
+      new DeviceCommunication().uploadFile(name, file);
       model.addAttribute("status", "Success!");
     }
     catch(Exception ex) {

@@ -27,21 +27,28 @@
 
 <div class="container">
 
-  <form class="form-horizontal" role="form" action="#" th:action="@{/files}" th:object="${file}" method="post">
+  <h3>Upload Animation</h3>
+
+  <form class="form-horizontal" role="form" action="#" th:action="@{/files}" method="post" enctype="multipart/form-data">
     <div class="form-group">
-      <label for="localPath" class="col-sm-2 control-label">Local Path</label>
+      <label for="inputFile" class="col-sm-2 control-label">File</label>
 
       <div class="col-sm-8">
-        <input class="form-control" id="localPath" th:field="*{localPath}" />
+        <input class="form-control" id="inputFile" type="file" name="file"/>
       </div>
     </div>
 
     <div class="form-group">
-      <label for="remoteName" class="col-sm-2 control-label">Remote Name</label>
+      <label for="inputName" class="col-sm-2 control-label">Name</label>
 
       <div class="col-sm-8">
-        <input class="form-control" id="remoteName" th:field="*{remoteName}" maxlength="8"/>
+        <input class="form-control" id="inputName" type="text" name="name" maxlength="8" required="true"/>
       </div>
+    </div>
+
+    <div class="form-group">
+      <p class="help-block col-sm-offset-2 col-sm-8">Please enter a short file name for the animation, 8 characters or less, without the 
+        .gif extension, such as anim1234</p>
     </div>
 
     <div class="form-group">
@@ -51,6 +58,7 @@
       </div>
     </div>
   </form>
+  <hr/>
 </div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
